@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/gridwise/zapdriver v1.4.2
-	go.uber.org/zap v1.21.0
+	go.uber.org/zap v1.19.1
 )
 
 require (
