@@ -9,7 +9,7 @@ import (
 const (
 	// TODO move these to env variables
 
-	EntriesToGrab = 5
+	EntriesToGrab = 10
 	lowThreshold  = 5.0
 	highThreshold = 10.0
 	urgentLow     = 3.0
