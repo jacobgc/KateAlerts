@@ -1,0 +1,11 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'test'
+    args: ['functions',
+           'deploy',
+           'kate-alert',
+           '--runtime=go116',
+           '--trigger-topic=kate-alert',
+           '--entry-point=HelloPubSub',
+           '--region=europe-west2',
+           '--source=https://source.developers.google.com/projects/$PROJECT_ID/repos/$REPO_NAME']
