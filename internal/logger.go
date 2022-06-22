@@ -1,14 +1,13 @@
 package internal
 
 import (
-	"fmt"
 	"github.com/gridwise/zapdriver"
 	"go.uber.org/zap"
 	"os"
 )
 
 func GetLogger() *zap.Logger {
-	gcpProject := os.Getenv("GCP_PROJECT")
+	gcpProject := os.Getenv("K_SERVICE")
 
 	env := os.Getenv("env")
 	var logger *zap.Logger
@@ -25,9 +24,6 @@ func GetLogger() *zap.Logger {
 	} else {
 		logger, _ = zap.NewProduction()
 		logger.Info("Using production logger")
-
-		//Get all env variables
-		fmt.Println(os.Environ())
 
 		return logger
 	}
