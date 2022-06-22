@@ -8,6 +8,7 @@ import (
 
 func GetLogger() *zap.Logger {
 	gcpProject := os.Getenv("GCP_PROJECT")
+
 	env := os.Getenv("env")
 	var logger *zap.Logger
 	// Assume running on Google Cloud
@@ -23,8 +24,11 @@ func GetLogger() *zap.Logger {
 	} else {
 		logger, _ = zap.NewProduction()
 		logger.Info("Using production logger")
+
+		//DUMP ENV
+		theEnv := os.Environ()
+		logger.Info("ENV", zap.Any("The Env", theEnv))
+
 		return logger
 	}
-
-	return logger
 }
