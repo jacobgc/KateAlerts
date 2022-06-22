@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"os"
+	"time"
 )
 
 const (
@@ -26,8 +27,18 @@ func Entrypoint() {
 	ifttt := NewIFTTT(os.Getenv("iftttURL"))
 
 	entries := xdripDataGrabber.Entries(EntriesToGrab)
-
 	currentLevel := MgdlToMmol(entries[0].Sgv)
+
+	// Check if data is recent
+	stale := entries[0].SysTime.Before(time.Now().Add(time.Duration(-10) * time.Minute))
+
+	if stale {
+		difference := time.Now().Sub(entries[0].SysTime)
+		ifttt.TriggerEndpoint("NOT READ", fmt.Sprintf(
+			"CGM data stale, last recorded value %2.fmmol/L. %2.f minutes ago", currentLevel, difference.Minutes()), "")
+		return
+	}
+
 	delta := MgdlToMmol(entries[0].Sgv - entries[EntriesToGrab-1].Sgv)
 	deltaText := fmt.Sprintf("%.2f", delta)
 	sendWarning := true
