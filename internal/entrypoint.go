@@ -23,7 +23,7 @@ func Entrypoint() {
 
 	logger.Info("Starting KateAlerts")
 
-	xdripDataGrabber := NewXDropDataGrabber(os.Getenv("xdripURL"))
+	xdripDataGrabber := NewXDropDataGrabber(os.Getenv("xdripURL"), os.Getenv("xdripToken"))
 	ifttt := NewIFTTT(os.Getenv("iftttURL"))
 
 	entries := xdripDataGrabber.Entries(EntriesToGrab)

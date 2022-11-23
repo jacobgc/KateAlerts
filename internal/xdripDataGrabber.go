@@ -12,6 +12,7 @@ type XDripDataGrabber struct {
 	baseURL string
 	client  *http.Client
 	logger  *zap.Logger
+	token   string
 }
 
 type EntriesResponse []struct {
@@ -30,11 +31,12 @@ type EntriesResponse []struct {
 	Mills      int64     `json:"mills"`
 }
 
-func NewXDropDataGrabber(url string) *XDripDataGrabber {
+func NewXDropDataGrabber(url string, token string) *XDripDataGrabber {
 	return &XDripDataGrabber{
 		baseURL: url,
 		client:  &http.Client{},
 		logger:  zap.L(),
+		token:   token,
 	}
 }
 
@@ -45,8 +47,12 @@ func MgdlToMmol(input int) float64 {
 func (x XDripDataGrabber) Entries(count int) EntriesResponse {
 	x.logger.Info("Grabbing entries from xdrip", zap.Int("count", count))
 	path := "/entries/sgv?count="
+	token := ""
+	if len(x.token) > 0 {
+		token = "&token=" + x.token
+	}
 
-	req, err := http.NewRequest("GET", x.baseURL+path+strconv.Itoa(count), nil)
+	req, err := http.NewRequest("GET", x.baseURL+path+strconv.Itoa(count)+token, nil)
 	if err != nil {
 		panic(err)
 	}
